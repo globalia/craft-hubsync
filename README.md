@@ -4,13 +4,13 @@ HubSynC lets you connect your Craft Commerce website to Hubspot CRM and synchron
 
 ## Features
 
-Synchronize Commerce Products and Hubspot Products automatically whenever a product is updated.
-Synchronize Craft Users to Hubspot Contacts automatically whenever a user is updated.
-Synchronize Commerce Orders to Hubspot deals automatically whenever an order is updated.
-Synchronize Commerce Carts to update Line Items on Hubspot whenever a product is added or removed from a cart.
-Add Custom Fields to Products, Users and Orders synchronizations.
-Manually Synchronize Users, Orders and Products from the CP via custom actions in Elements lists.
-Visualize Synchronization status in Elements List via a custom column.
+- Synchronize Commerce Products and Hubspot Products automatically whenever a product is updated.
+- Synchronize Craft Users to Hubspot Contacts automatically whenever a user is updated.
+- Synchronize Commerce Orders to Hubspot deals automatically whenever an order is updated.
+- Synchronize Commerce Carts to update Line Items on Hubspot whenever a product is added or removed from a cart.
+- Add Custom Fields to Products, Users and Orders synchronizations.
+- Manually Synchronize Users, Orders and Products from the CP via custom actions in Elements lists.
+- Visualize Synchronization status in Elements List via a custom column.
 
 #### Data Synchronization
 
