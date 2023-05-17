@@ -1,0 +1,54 @@
+{
+    "name": "globalia/craft-hubsync",
+    "description": "Automated synchronization from Craft Commerce to Hubspot CRM",
+    "type": "craft-plugin",
+    "license": "proprietary",
+    "version": "1.0",
+    "authors": [
+        {
+            "name": "Globalia",
+            "homepage": "https://www.globaliadigital.com/"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/globalia/craft-hubsync",
+        "issues": "https://github.com/globalia/craft-hubsync/issues"
+    },
+    "require": {
+        "php": ">=8.0.2",
+        "craftcms/cms": "^4.3.10",
+        "hubspot/api-client": "^9.2"
+    },
+    "require-dev": {
+        "craftcms/ecs": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "globalia\\hubsync\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "hubsync",
+        "name": "HubSynC",
+        "developer": "Globalia",
+        "developerUrl": "https://www.globaliadigital.com/",
+        "documentationUrl": "",
+        "class": "globalia\\hubsync\\HubSynC"
+    },
+    "scripts": {
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --ansi --fix",
+        "phpstan": "phpstan --memory-limit=1G"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0.2"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    }
+}
+

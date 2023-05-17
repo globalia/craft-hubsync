@@ -1,0 +1,253 @@
+{% extends '_layouts/cp' %}
+
+{# @var plugin \globalia\hubsync\HubSynC #}
+{# @var settings \globalia\hubsync\models\Settings #}
+
+{% import '_includes/forms.twig' as forms %}
+
+
+{% set title = 'HubSynC Settings' %}
+
+{% set crumbs = [
+    { label: 'Settings'|t('app'), url: url('settings') },
+    { label: 'Plugins'|t('app'), url: url('settings/plugins') }
+] %}
+
+{% set tabs = {
+    general: {label: 'tab.general'|t(plugin.handle), url: '#general'},
+    contacts: {label: 'tab.contacts'|t(plugin.handle), url: '#contacts'},
+    products: {label: 'tab.products'|t(plugin.handle), url: '#products'},
+    deals: {label: 'tab.deals'|t(plugin.handle), url: '#deals'},
+    lineitems: {label: 'tab.line-items'|t(plugin.handle), url: '#lineitems'}
+} %}
+
+{% set selectedTab = 'general' %}
+
+{% set fullPageForm = true %}
+
+{% block actionButton %}
+
+    <input type="submit" class="btn submit" value="{{ 'Save'|t('app') }}">
+
+{% endblock %}
+
+{% block content %}
+
+    <input type="hidden" name="action" value="hubsync/settings/save">
+
+    <div id="general">
+        {{ forms.autosuggestField({
+            label: "settings.apiToken.label"|t('hubsync'),
+            instructions: "settings.apiToken.instructions" |t(plugin.handle),
+            id: 'apiToken',
+            name: 'settings[apiToken]',
+            value: settings.apiToken,
+            suggestEnvVars: true,
+            required: true,
+            errors: settings.getErrors('token')
+        }) }}
+
+        {% if not tokenIsValid %}
+            <p style="color:red">{{ "token.invalid"|t(plugin.handle) }}</p>
+            {% if tokenInfo.missingScopes is defined and  tokenInfo.missingScopes|length %}
+                <h3>{{ "token.missing-scopes.title"|t(plugin.handle) }}</h3>
+                <p style="color:red">{{ "token.missing-scopes.description"|t(plugin.handle) }}</p>
+                <ul>
+                    {% for scope in tokenInfo.missingScopes %}
+                        <li>{{ scope }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div id="contacts" class="hidden">
+        {% if tokenIsValid %}
+
+            {{ forms.lightswitchField({
+                label: "settings.syncUsersOnSave.label"|t(plugin.handle),
+                instructions: "settings.syncUsersOnSave.instructions"|t(plugin.handle),
+                name: 'settings[syncUsersOnSave]',
+                on: settings.syncUsersOnSave,
+            }) }}
+
+            {% set cols = {
+                craftField: {
+                    type: 'singleline',
+                    heading: 'table.craft-field.heading'|t(plugin.handle),
+                    placeholder: "table.craft-field.placeholder"|t(plugin.handle),
+                    code: true,
+                },
+                hubspotField: {
+                    type: 'singleline',
+                    heading: 'table.hubspot-field.heading'|t(plugin.handle),
+                    placeholder: "table.hubspot-field.placeholder"|t(plugin.handle),
+                    code: true,
+                }
+            } %}
+
+            {{ forms.editableTableField({
+                label: "settings.customContactFields.label"|t(plugin.handle),
+                instructions: "settings.customContactFields.instructions"|t(plugin.handle),
+                name: 'settings[customContactFields]',
+                id: 'customContactFields',
+                cols: cols,
+                rows: settings.customContactFields,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: false,
+                addRowLabel: "table.add-field"|t(plugin.handle),
+            }) }}
+        {% endif %}
+    </div>
+
+    <div id="products" class="hidden">
+        {% if tokenIsValid %}
+
+            {{ forms.lightswitchField({
+                label: "settings.syncProductsOnSave.label"|t(plugin.handle),
+                instructions: "settings.syncProductsOnSave.instructions"|t(plugin.handle),
+                name: 'settings[syncProductsOnSave]',
+                on: settings.syncProductsOnSave,
+            }) }}
+
+            {{ forms.autosuggestField({
+                label: "settings.productSkuField.label" |t(plugin.handle),
+                instructions: "settings.productSkuField.instructions" |t(plugin.handle),
+                id: 'productSkuField',
+                name: 'settings[productSkuField]',
+                value: settings.productSkuField,
+                errors: settings.getErrors('productSkuField')
+            }) }}
+
+            {% set cols = {
+                craftField: {
+                    type: 'singleline',
+                    heading: 'table.craft-field.heading'|t(plugin.handle),
+                    placeholder: "table.craft-field.placeholder"|t(plugin.handle),
+                    code: true,
+                },
+                hubspotField: {
+                    type: 'singleline',
+                    heading: 'table.hubspot-field.heading'|t(plugin.handle),
+                    placeholder: "table.hubspot-field.placeholder"|t(plugin.handle),
+                    code: true,
+                }
+            } %}
+
+            {{ forms.editableTableField({
+                label: "settings.customProductFields.label"|t(plugin.handle),
+                instructions: "settings.customProductFields.instructions"|t(plugin.handle),
+                name: 'settings[customProductFields]',
+                id: 'customProductFields',
+                cols: cols,
+                rows: settings.customProductFields,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: false,
+                addRowLabel: "Add a custom field"|t(plugin.handle),
+            }) }}
+        {% endif %}
+    </div>
+
+    <div id="deals" class="hidden">
+        {% if tokenIsValid %}
+            {{ forms.lightswitchField({
+                label: "settings.syncDealsOnOrderComplete.label"|t(plugin.handle),
+                instructions: "settings.syncDealsOnOrderComplete.instructions"|t(plugin.handle),
+                name: 'settings[syncDealsOnOrderComplete]',
+                on: settings.syncDealsOnOrderComplete,
+            }) }}
+
+            {{ forms.selectField({
+                label: "settings.dealPipeline.label"|t(plugin.handle),
+                instructions: "settings.dealPipeline.instructions"|t(plugin.handle),
+                name: 'settings[dealPipeline]',
+                options: pipelines,
+                value: settings.dealPipeline,
+            }) }}
+
+            {{ forms.selectField({
+                label: "settings.dealStageDefault.label'"|t(plugin.handle),
+                instructions: "settings.dealStageDefault.instructions"|t(plugin.handle),
+                name: 'settings[dealStageDefault]',
+                options: pipelineStages,
+                value: settings.dealStageDefault,
+            }) }}
+
+            {{ forms.selectField({
+                label: "settings.dealStageCompleted.label"|t(plugin.handle),
+                instructions: "settings.dealStageCompleted.instructions"|t(plugin.handle),
+                name: 'settings[dealStageCompleted]',
+                options: pipelineStages,
+                value: settings.dealStageCompleted,
+            }) }}
+
+            {{ forms.autosuggestField({
+                label: "settings.dealOwnerId.label" |t(plugin.handle),
+                instructions: 'settings.dealOwnerId.instructions'|t(plugin.handle),
+                id: 'dealOwnerId',
+                name: 'settings[dealOwnerId]',
+                value: settings.dealOwnerId,
+                errors: settings.getErrors('dealOwnerId')
+            }) }}
+
+            {% set cols = {
+                craftField: {
+                    type: 'singleline',
+                    heading: 'table.craft-field.heading'|t(plugin.handle),
+                    placeholder: "table.craft-field.placeholder"|t(plugin.handle),
+                    code: true,
+                },
+                hubspotField: {
+                    type: 'singleline',
+                    heading: 'table.hubspot-field.heading'|t(plugin.handle),
+                    placeholder: "table.hubspot-field.placeholder"|t(plugin.handle),
+                    code: true,
+                }
+            } %}
+
+            {{ forms.editableTableField({
+                label: "settings.customDealFields.label"|t(plugin.handle),
+                instructions: "settings.customDealFields.instructions"|t(plugin.handle),
+                name: 'settings[customDealFields]',
+                id: 'customDealFields',
+                cols: cols,
+                rows: settings.customDealFields,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: false,
+                addRowLabel: "table.add-field"|t(plugin.handle),
+            }) }} 
+            
+        {% endif %}
+    </div>
+    
+    <div id="lineitems" class="hidden">
+        {% if tokenIsValid %}
+            {{ forms.lightswitchField({
+                label: "settings.syncLineItemsWithOrders.label"|t(plugin.handle),
+                instructions: "settings.syncLineItemsWithOrders.instructions"|t(plugin.handle),
+                name: 'settings[syncLineItemsWithOrders]',
+                on: settings.syncLineItemsWithOrders,
+            }) }}
+
+            {{ forms.lightswitchField({
+                label: "settings.syncLineItemsOnCartEvents.label"|t(plugin.handle),
+                instructions: "settings.syncLineItemsOnCartEvents.instructions"|t(plugin.handle),
+                name: 'settings[syncLineItemsOnCartEvents]',
+                on: settings.syncLineItemsOnCartEvents,
+            }) }}
+        {% endif %}
+    </div>
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
