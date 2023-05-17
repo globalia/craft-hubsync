@@ -4,6 +4,17 @@
     "type": "craft-plugin",
     "license": "proprietary",
     "version": "1.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "hubsync",
+        "hubspot",
+        "commerce",
+        "commerce-plugin",
+        "synchronization"
+    ],
     "authors": [
         {
             "name": "Globalia",
@@ -32,7 +43,7 @@
         "name": "HubSynC",
         "developer": "Globalia",
         "developerUrl": "https://www.globaliadigital.com/",
-        "documentationUrl": "",
+        "documentationUrl": "https://github.com/globalia/craft-hubsync/blob/main/README.md",
         "class": "globalia\\hubsync\\HubSynC"
     },
     "scripts": {
