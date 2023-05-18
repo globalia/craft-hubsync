@@ -3,7 +3,7 @@
     "description": "Automated synchronization from Craft Commerce to Hubspot CRM",
     "type": "craft-plugin",
     "license": "proprietary",
-    "version": "1.0",
+    "version": "1.0.0",
     "keywords": [
         "craft",
         "cms",
